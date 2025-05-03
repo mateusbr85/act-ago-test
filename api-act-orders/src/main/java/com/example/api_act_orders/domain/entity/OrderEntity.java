@@ -23,9 +23,6 @@ public class OrderEntity  {
     @Column(name = "order_id")
     private UUID id;
 
-    @Column(name = "order_name", nullable = false)
-    private String name;
-
     @Column(name = "order_fk_product_id", nullable = false)
     private UUID productId;
 

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController()
 @RequestMapping(value = "orders")
 public class OrderController {
@@ -32,5 +34,12 @@ public class OrderController {
         return ResponseEntity.ok(createOrder);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderEntity> getOrderById(
+            @PathVariable UUID id
+
+    ){
+        return ResponseEntity.ok(orderService.getOrderById(id));
+    }
 
 }

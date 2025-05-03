@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,12 +35,11 @@ public class OrderService implements IOrderService {
     @Override
     public OrderEntity createOrder(CreateOrderRequest createOrderRequest) {
         try{
-            ProductResponse productResponse = this.fetchProductOrThrow(createOrderRequest.productId());
+//            ProductResponse productResponse = this.fetchProductOrThrow(createOrderRequest.productId());
 
             OrderEntity order = new OrderEntity();
-            order.setProductId(productResponse.id());
-            order.setName(createOrderRequest.name());
-            order.setTotal(productResponse.price());
+            order.setProductId(createOrderRequest.productId());
+            order.setTotal(BigDecimal.valueOf(100.00));
 
             return this.orderRepository.save(order);
 
