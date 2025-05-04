@@ -35,11 +35,11 @@ public class OrderService implements IOrderService {
     @Override
     public OrderEntity createOrder(CreateOrderRequest createOrderRequest) {
         try{
-//            ProductResponse productResponse = this.fetchProductOrThrow(createOrderRequest.productId());
+            ProductResponse productResponse = this.fetchProductOrThrow(createOrderRequest.productId());
 
             OrderEntity order = new OrderEntity();
             order.setProductId(createOrderRequest.productId());
-            order.setTotal(BigDecimal.valueOf(100.00));
+            order.setTotal(productResponse.price());
 
             return this.orderRepository.save(order);
 
