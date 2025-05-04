@@ -3,7 +3,7 @@ package com.example.api_act_orders.domain.service;
 import com.example.api_act_orders.adapters.outputs.client.ProductClient;
 import com.example.api_act_orders.domain.entity.OrderEntity;
 import com.example.api_act_orders.domain.exception.ProductClientException;
-import com.example.api_act_orders.domain.ports.inputs.service.request.CreateOrderRequest;
+import com.example.api_act_orders.domain.ports.inputs.request.CreateOrderRequest;
 import com.example.api_act_orders.domain.ports.outputs.client.response.ProductResponse;
 import com.example.api_act_orders.domain.ports.outputs.repositories.IOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +43,7 @@ class OrderServiceTest {
     @BeforeEach
     void setUp() {
         productId = UUID.randomUUID();
-        createOrderRequest = new CreateOrderRequest(productId, "Product Name");
+        createOrderRequest = new CreateOrderRequest(productId);
     }
 
     @Test
@@ -55,7 +55,6 @@ class OrderServiceTest {
 
         OrderEntity savedOrder = new OrderEntity();
         savedOrder.setProductId(productId);
-        savedOrder.setName("Product Name");
         savedOrder.setTotal(valueProduct);
         when(orderRepository.save(any(OrderEntity.class))).thenReturn(savedOrder);
 
@@ -65,7 +64,6 @@ class OrderServiceTest {
         // Assert
         assertNotNull(createdOrder);
         assertEquals(productId, createdOrder.getProductId());
-        assertEquals("Product Name", createdOrder.getName());
         assertEquals(valueProduct, createdOrder.getTotal());
         verify(orderRepository, times(1)).save(any(OrderEntity.class)); // Verificar se o save foi chamado
     }
@@ -114,7 +112,6 @@ class OrderServiceTest {
         // Arrange
         OrderEntity order = new OrderEntity();
         order.setProductId(UUID.randomUUID());
-        order.setName("Pedido 1");
         order.setTotal(BigDecimal.valueOf(150.00));
 
         List<OrderEntity> orders = List.of(order);
@@ -128,7 +125,6 @@ class OrderServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
-        assertEquals("Pedido 1", result.getContent().get(0).getName());
         verify(orderRepository, times(1)).findAll(PageRequest.of(0, 10));
     }
 
@@ -138,7 +134,6 @@ class OrderServiceTest {
         UUID orderId = UUID.randomUUID();
         OrderEntity order = new OrderEntity();
         order.setId(orderId);
-        order.setName("Pedido Teste");
         order.setProductId(productId);
         order.setTotal(BigDecimal.valueOf(200.00));
 
@@ -150,7 +145,6 @@ class OrderServiceTest {
         // Assert
         assertNotNull(result);
         assertEquals(orderId, result.getId());
-        assertEquals("Pedido Teste", result.getName());
         verify(orderRepository, times(1)).findById(orderId);
     }
 

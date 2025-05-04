@@ -1,4 +1,4 @@
-package com.example.api_act_orders.domain.ports.inputs.service.request;
+package com.example.api_act_orders.domain.ports.inputs.request;
 
 import java.util.UUID;
 

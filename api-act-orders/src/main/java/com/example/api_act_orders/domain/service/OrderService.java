@@ -1,13 +1,18 @@
 package com.example.api_act_orders.domain.service;
 
 import com.example.api_act_orders.adapters.outputs.client.ProductClient;
+import com.example.api_act_orders.adapters.outputs.kafka.OrderEventPublisher;
 import com.example.api_act_orders.domain.entity.OrderEntity;
-import com.example.api_act_orders.domain.entity.OrderStatusEntity;
+import com.example.api_act_orders.domain.record.CreateOrderStatus;
+import com.example.api_act_orders.domain.enums.StatusEnum;
 import com.example.api_act_orders.domain.exception.ProductClientException;
 import com.example.api_act_orders.domain.ports.inputs.service.IOrderService;
-import com.example.api_act_orders.domain.ports.inputs.service.request.CreateOrderRequest;
+import com.example.api_act_orders.domain.ports.inputs.request.CreateOrderRequest;
+import com.example.api_act_orders.domain.ports.inputs.service.IOrderStatusService;
 import com.example.api_act_orders.domain.ports.outputs.client.response.ProductResponse;
 import com.example.api_act_orders.domain.ports.outputs.repositories.IOrderRepository;
+
+import com.example.api_act_orders.domain.record.OrderCreatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,20 +22,22 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 @Service
 public class OrderService implements IOrderService {
 
-    private final IOrderRepository orderRepository;
-    private final ProductClient productClient;
+    @Autowired
+    private IOrderRepository orderRepository;
 
-    public OrderService(IOrderRepository orderRepository, ProductClient productClient) {
-        this.orderRepository = orderRepository;
-        this.productClient = productClient;
-    }
+    @Autowired
+    private ProductClient productClient;
+
+    @Autowired
+    private IOrderStatusService orderStatusService;
+
+    @Autowired
+    private OrderEventPublisher orderEventPublisher;
 
     @Override
     public OrderEntity createOrder(CreateOrderRequest createOrderRequest) {
@@ -40,8 +47,15 @@ public class OrderService implements IOrderService {
             OrderEntity order = new OrderEntity();
             order.setProductId(createOrderRequest.productId());
             order.setTotal(productResponse.price());
+            OrderEntity orderSave = this.orderRepository.save(order);
 
-            return this.orderRepository.save(order);
+            CreateOrderStatus orderStatus = new CreateOrderStatus(StatusEnum.PENDENTE);
+            this.orderStatusService.create(orderStatus, orderSave);
+
+            OrderCreatedEvent event = new OrderCreatedEvent(orderSave.getId(),productResponse.id(),productResponse.price());
+            this.orderEventPublisher.publish(event);
+
+            return orderSave;
 
         }catch (HttpClientErrorException err){
             throw new HttpClientErrorException(HttpStatusCode.valueOf(422));

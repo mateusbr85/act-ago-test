@@ -2,7 +2,7 @@ package com.example.api_act_orders.adapters.inputs.controller;
 
 import com.example.api_act_orders.domain.entity.OrderEntity;
 import com.example.api_act_orders.domain.ports.inputs.service.IOrderService;
-import com.example.api_act_orders.domain.ports.inputs.service.request.CreateOrderRequest;
+import com.example.api_act_orders.domain.ports.inputs.request.CreateOrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
