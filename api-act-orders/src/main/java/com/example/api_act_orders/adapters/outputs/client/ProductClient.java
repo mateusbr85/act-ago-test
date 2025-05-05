@@ -7,12 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(name = "product-service", url = "http://localhost:8081")
+@FeignClient(name = "${product.service.name}", url = "${product.service.url}")
 public interface ProductClient {
 
     @GetMapping("/products/{id}")
     ProductResponse getProductById(@PathVariable("id") UUID productId);
-//
-//    @GetMapping("products/{id}/valid")
-//    boolean exis
 }
