@@ -46,13 +46,13 @@ public class OrderService implements IOrderService {
 
             OrderEntity order = new OrderEntity();
             order.setProductId(createOrderRequest.productId());
-            order.setTotal(productResponse.price());
+            order.setTotal(productResponse.value());
             OrderEntity orderSave = this.orderRepository.save(order);
 
             CreateOrderStatus orderStatus = new CreateOrderStatus(StatusEnum.PENDENTE);
             this.orderStatusService.create(orderStatus, orderSave);
 
-            OrderCreatedEvent event = new OrderCreatedEvent(orderSave.getId(),productResponse.id(),productResponse.price());
+            OrderCreatedEvent event = new OrderCreatedEvent(orderSave.getId(),productResponse.id(),productResponse.value());
             this.orderEventPublisher.publish(event);
 
             return orderSave;
