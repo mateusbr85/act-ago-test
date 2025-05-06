@@ -3,6 +3,7 @@ package com.example.api_act_orders.config;
 import com.example.api_act_orders.domain.record.OrderCreatedEvent;
 
 
+import com.example.api_act_orders.domain.record.PaymentCreatedEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,7 @@ public class KafkaProducerConfig {
     private String bootstrapAddress;
 
     @Bean
-    public ProducerFactory<String, OrderCreatedEvent> producerFactory() {
+    public ProducerFactory<String, PaymentCreatedEvent> producerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,bootstrapAddress);
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -33,7 +34,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, OrderCreatedEvent> KafkaTemplate() {
+    public KafkaTemplate<String, PaymentCreatedEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

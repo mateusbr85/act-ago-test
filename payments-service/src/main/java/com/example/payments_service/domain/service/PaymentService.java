@@ -1,7 +1,9 @@
 package com.example.payments_service.domain.service;
 
 import com.example.payments_service.domain.entity.PaymentEntity;
+import com.example.payments_service.domain.enums.PaymentStatusEnum;
 import com.example.payments_service.domain.ports.inputs.service.IPaymentService;
+import com.example.payments_service.domain.ports.outputs.repositories.IPaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -12,12 +14,15 @@ import java.util.UUID;
 public class PaymentService implements IPaymentService {
 
     @Autowired
-    private IPaymentService paymentService;
+    private IPaymentRepository paymentRepository;
 
 
     @Override
     public PaymentEntity create(UUID orderId) {
-        return null;
+        PaymentEntity payment = new PaymentEntity();
+        payment.setOrderId(orderId);
+        payment.setStatus(PaymentStatusEnum.PENDENTE);
+        return this.paymentRepository.save(payment);
     }
 
     @Override
