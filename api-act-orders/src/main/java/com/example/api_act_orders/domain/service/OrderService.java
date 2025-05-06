@@ -1,7 +1,7 @@
 package com.example.api_act_orders.domain.service;
 
 import com.example.api_act_orders.adapters.outputs.client.ProductClient;
-import com.example.api_act_orders.adapters.outputs.kafka.OrderEventPublisher;
+import com.example.api_act_orders.adapters.outputs.kafka.PaymentEventPublisher;
 import com.example.api_act_orders.domain.entity.OrderEntity;
 import com.example.api_act_orders.domain.record.CreateOrderStatus;
 import com.example.api_act_orders.domain.enums.StatusEnum;
@@ -13,6 +13,7 @@ import com.example.api_act_orders.domain.ports.outputs.client.response.ProductRe
 import com.example.api_act_orders.domain.ports.outputs.repositories.IOrderRepository;
 
 import com.example.api_act_orders.domain.record.OrderCreatedEvent;
+import com.example.api_act_orders.domain.record.PaymentCreatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,7 +38,7 @@ public class OrderService implements IOrderService {
     private IOrderStatusService orderStatusService;
 
     @Autowired
-    private OrderEventPublisher orderEventPublisher;
+    private PaymentEventPublisher paymentEventPublisher;
 
     @Override
     public OrderEntity createOrder(CreateOrderRequest createOrderRequest) {
@@ -52,8 +53,8 @@ public class OrderService implements IOrderService {
             CreateOrderStatus orderStatus = new CreateOrderStatus(StatusEnum.PENDENTE);
             this.orderStatusService.create(orderStatus, orderSave);
 
-            OrderCreatedEvent event = new OrderCreatedEvent(orderSave.getId(),productResponse.id(),productResponse.value());
-            this.orderEventPublisher.publish(event);
+            PaymentCreatedEvent event = new PaymentCreatedEvent(orderSave.getId());
+            this.paymentEventPublisher.publish(event);
 
             return orderSave;
 

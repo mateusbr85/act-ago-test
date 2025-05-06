@@ -19,6 +19,7 @@
     <modules>
         <module>api-act-orders</module>
         <module>products-service</module>
+        <module>payments-service</module>
     </modules>
 
     <properties>
