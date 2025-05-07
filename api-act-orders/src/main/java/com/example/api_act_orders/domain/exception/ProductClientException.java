@@ -5,7 +5,8 @@ public class ProductClientException extends RuntimeException {
         NOT_FOUND,
         UNAUTHORIZED,
         TIMEOUT,
-        UNKNOWN
+        UNKNOWN,
+        CONNECTION_ERROR
     }
 
     private final Reason reason;

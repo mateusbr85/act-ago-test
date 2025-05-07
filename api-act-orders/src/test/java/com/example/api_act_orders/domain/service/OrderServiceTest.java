@@ -1,6 +1,6 @@
 package com.example.api_act_orders.domain.service;
 
-import com.example.api_act_orders.adapters.outputs.client.ProductClient;
+import com.example.api_act_orders.adapters.outputs.client.productService.ProductClient;
 import com.example.api_act_orders.domain.entity.OrderEntity;
 import com.example.api_act_orders.domain.exception.ProductClientException;
 import com.example.api_act_orders.domain.ports.inputs.request.CreateOrderRequest;

@@ -1,6 +1,6 @@
 package com.example.api_act_orders.domain.service;
 
-import com.example.api_act_orders.adapters.outputs.client.ProductClient;
+import com.example.api_act_orders.adapters.outputs.client.productService.ProductClient;
 import com.example.api_act_orders.adapters.outputs.kafka.PaymentEventPublisher;
 import com.example.api_act_orders.domain.entity.OrderEntity;
 import com.example.api_act_orders.domain.record.CreateOrderStatus;
@@ -12,21 +12,21 @@ import com.example.api_act_orders.domain.ports.inputs.service.IOrderStatusServic
 import com.example.api_act_orders.domain.ports.outputs.client.response.ProductResponse;
 import com.example.api_act_orders.domain.ports.outputs.repositories.IOrderRepository;
 
-import com.example.api_act_orders.domain.record.OrderCreatedEvent;
 import com.example.api_act_orders.domain.record.PaymentCreatedEvent;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OrderService implements IOrderService {
 
@@ -56,8 +56,12 @@ public class OrderService implements IOrderService {
 
             return orderSave;
 
-        }catch (HttpClientErrorException err){
-            throw new HttpClientErrorException(HttpStatusCode.valueOf(422));
+        }catch (ProductClientException e) {
+            log.error("Erro ao validar o prodtuo: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao criar pedido: {}", e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -75,15 +79,15 @@ public class OrderService implements IOrderService {
 
     private ProductResponse fetchProductOrThrow(UUID productId) {
         try {
-            return this.productClient.getProductById(productId);
-        } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw new ProductClientException("Produto não encontrado: " + productId, ProductClientException.Reason.NOT_FOUND);
-            } else if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                throw new ProductClientException("Acesso não autorizado ao serviço de produto", ProductClientException.Reason.UNAUTHORIZED);
-            } else {
-                throw new ProductClientException("Erro desconhecido no serviço de produto", ProductClientException.Reason.UNKNOWN);
-            }
+            return productClient.getProductById(productId); // corrige o uso de id para productId
+        } catch (FeignException e) {
+            log.error("Erro de comunicação com o serviço de produto: {}", e.getMessage(), ProductClientException.Reason.CONNECTION_ERROR);
+            throw new ProductClientException("Erro de comunicação com o serviço de produto: " + e.getMessage(), ProductClientException.Reason.CONNECTION_ERROR);
+        } catch (ProductClientException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Erro inesperado ao buscar produto: {}", e.getMessage());
+            throw new ProductClientException("Erro desconhecido ao buscar produto: " + e.getMessage(), ProductClientException.Reason.UNKNOWN);
         }
     }
 }
