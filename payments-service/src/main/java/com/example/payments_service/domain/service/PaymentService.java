@@ -4,17 +4,18 @@ import com.example.payments_service.domain.entity.PaymentEntity;
 import com.example.payments_service.domain.enums.PaymentStatusEnum;
 import com.example.payments_service.domain.ports.inputs.service.IPaymentService;
 import com.example.payments_service.domain.ports.outputs.repositories.IPaymentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentService implements IPaymentService {
 
-    @Autowired
-    private IPaymentRepository paymentRepository;
+
+    private final IPaymentRepository paymentRepository;
 
 
     @Override

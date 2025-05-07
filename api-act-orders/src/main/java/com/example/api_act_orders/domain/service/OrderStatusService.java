@@ -6,15 +6,16 @@ import com.example.api_act_orders.domain.entity.StatusTypeEntity;
 import com.example.api_act_orders.domain.record.CreateOrderStatus;
 import com.example.api_act_orders.domain.ports.inputs.service.IOrderStatusService;
 import com.example.api_act_orders.domain.ports.outputs.repositories.IOrderStatusRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class OrderStatusService implements IOrderStatusService {
 
-    @Autowired
-    private IOrderStatusRepository orderStatusRepository;
+    private final IOrderStatusRepository orderStatusRepository;
 
     @Override
     public OrderStatusEntity create(CreateOrderStatus createOrderStatus, OrderEntity order) {

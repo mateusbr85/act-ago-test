@@ -14,6 +14,7 @@ import com.example.api_act_orders.domain.ports.outputs.repositories.IOrderReposi
 
 import com.example.api_act_orders.domain.record.OrderCreatedEvent;
 import com.example.api_act_orders.domain.record.PaymentCreatedEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,19 +27,16 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService implements IOrderService {
 
-    @Autowired
-    private IOrderRepository orderRepository;
+    private final IOrderRepository orderRepository;
 
-    @Autowired
-    private ProductClient productClient;
+    private final ProductClient productClient;
 
-    @Autowired
-    private IOrderStatusService orderStatusService;
+    private final IOrderStatusService orderStatusService;
 
-    @Autowired
-    private PaymentEventPublisher paymentEventPublisher;
+    private final PaymentEventPublisher paymentEventPublisher;
 
     @Override
     public OrderEntity createOrder(CreateOrderRequest createOrderRequest) {

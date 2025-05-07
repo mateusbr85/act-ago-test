@@ -4,6 +4,7 @@ import com.example.products_service.domain.entity.ProductEntity;
 import com.example.products_service.domain.ports.inputs.service.IProductService;
 import com.example.products_service.domain.ports.outputs.repositories.IProductRepository;
 import com.example.products_service.domain.record.CreateOrderRecord;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService implements IProductService {
 
-    @Autowired
-    private IProductRepository productRepository;
+    private final IProductRepository productRepository;
 
     @Override
     public ProductEntity createOrder(CreateOrderRecord createOrderRecord) {

@@ -3,6 +3,7 @@ package com.example.products_service.adapters.inputs.controller;
 import com.example.products_service.domain.entity.ProductEntity;
 import com.example.products_service.domain.ports.inputs.service.IProductService;
 import com.example.products_service.domain.record.CreateOrderRecord;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/products")
 public class ProductController {
 
-    @Autowired
-    IProductService productService;
+    private final IProductService productService;
 
     @PostMapping
     public ResponseEntity<ProductEntity> createProduct(

@@ -3,7 +3,7 @@ package com.example.api_act_orders.adapters.inputs.controller;
 import com.example.api_act_orders.domain.entity.OrderEntity;
 import com.example.api_act_orders.domain.ports.inputs.service.IOrderService;
 import com.example.api_act_orders.domain.ports.inputs.request.CreateOrderRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +12,11 @@ import java.util.UUID;
 
 @RestController()
 @RequestMapping(value = "orders")
+@RequiredArgsConstructor
 public class OrderController {
 
-    @Autowired
-    private IOrderService orderService;
+
+    private final IOrderService orderService;
 
     @GetMapping
     public ResponseEntity<Page<OrderEntity>> listOrders(
