@@ -3,7 +3,9 @@ package com.example.api_act_orders.domain.enums;
 public enum StatusEnum {
     PENDENTE(1),
     PAGO(2),
-    CANCELADO(3);
+    CANCELADO(3),
+    INVALIDO(4);
+
 
     private final int id;
 

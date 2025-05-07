@@ -1,6 +1,7 @@
 package com.example.api_act_orders.domain.ports.inputs.service;
 
 import com.example.api_act_orders.domain.entity.OrderEntity;
+import com.example.api_act_orders.domain.enums.StatusEnum;
 import com.example.api_act_orders.domain.ports.inputs.request.CreateOrderRequest;
 import org.springframework.data.domain.Page;
 

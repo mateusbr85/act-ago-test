@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 public class PaymentConsumerService {
 
 
-    private IPaymentService paymentService;
+    private final IPaymentService paymentService;
 
     @KafkaListener(topics = "order-payment-created", groupId = "payment-group")
     public void consume(String message) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         PaymentCreatedEvent event = objectMapper.readValue(message, PaymentCreatedEvent.class);
 
-        paymentService.create(event.orderId());
+        paymentService.createPayment(event.orderId());
         System.out.println("Pagamento processado para o pedido: " + event.orderId());
     }
 }

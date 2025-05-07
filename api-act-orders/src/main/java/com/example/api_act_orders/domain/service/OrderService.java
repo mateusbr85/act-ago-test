@@ -3,6 +3,7 @@ package com.example.api_act_orders.domain.service;
 import com.example.api_act_orders.adapters.outputs.client.productService.ProductClient;
 import com.example.api_act_orders.adapters.outputs.kafka.PaymentEventPublisher;
 import com.example.api_act_orders.domain.entity.OrderEntity;
+import com.example.api_act_orders.domain.entity.OrderStatusEntity;
 import com.example.api_act_orders.domain.record.CreateOrderStatus;
 import com.example.api_act_orders.domain.enums.StatusEnum;
 import com.example.api_act_orders.domain.exception.ProductClientException;

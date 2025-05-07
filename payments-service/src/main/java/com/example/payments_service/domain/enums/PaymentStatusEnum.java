@@ -3,7 +3,8 @@ package com.example.payments_service.domain.enums;
 public enum PaymentStatusEnum {
     PENDENTE(1),
     PAGO(2),
-    CANCELADO(3);
+    CANCELADO(3),
+    INVALIDO(4);
 
     private final int code;
 
